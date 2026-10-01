@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Bassline Equalizer</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="5" width="3.2" height="14" rx="1.6"/>
+          <rect x="8.4" y="9" width="3.2" height="10" rx="1.6"/>
+          <rect x="13.8" y="12" width="3.2" height="7" rx="1.6"/>
+          <rect x="19.2" y="14.5" width="1.8" height="4.5" rx=".9"/>
+        </svg>
+        <div class="titles">
+          <h1>Bassline</h1>
+          <p id="sub">Loading</p>
+        </div>
+      </div>
+      <button id="power" class="power" type="button" aria-pressed="false" title="Enable on this tab">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3v8"/>
+          <path d="M6.6 6.8a8 8 0 1 0 10.8 0"/>
+        </svg>
+      </button>
+    </header>
+
+    <canvas id="viz" height="96"></canvas>
+
+    <div id="presets" class="presets" role="group" aria-label="Presets"></div>
+
+    <nav class="tabs" role="tablist">
+      <button type="button" role="tab" data-tab="sound" aria-selected="true">Sound</button>
+      <button type="button" role="tab" data-tab="eq" aria-selected="false">Equalizer</button>
+      <button type="button" role="tab" data-tab="fx" aria-selected="false">Effects</button>
+    </nav>
+
+    <main>
+      <section id="tab-sound" role="tabpanel"></section>
+      <section id="tab-eq" role="tabpanel" hidden>
+        <div class="eq-head">
+          <span class="eq-title">10-band</span>
+          <button type="button" id="eq-reset" class="link">Reset</button>
+        </div>
+        <div id="eq-bands" class="eq-bands"></div>
+      </section>
+      <section id="tab-fx" role="tabpanel" hidden></section>
+    </main>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bassline Equalizer for Chrome</title>
+  <meta name="description" content="Clean bass boost, a 10-band equalizer and sound effects for any Chrome tab.">
+  <meta property="og:title" content="Bassline Equalizer for Chrome">
+  <meta property="og:description" content="Clean bass boost, a 10-band equalizer and sound effects for any Chrome tab.">
+  <meta property="og:image" content="https://bassline.imtaqin.id/assets/sound.png">
+  <link rel="icon" href="assets/icon.png">
+  <style>
+    :root {
+      --bg: #121316;
+      --surface: #1a1b1f;
+      --surface-2: #222328;
+      --line: #2c2e34;
+      --text: #ececee;
+      --muted: #8a8d96;
+      --accent: #2dd4bf;
+      --on-accent: #06201c;
+      color-scheme: dark;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f6f6f7;
+        --surface: #ffffff;
+        --surface-2: #ecedef;
+        --line: #dcdee2;
+        --text: #17181b;
+        --muted: #5f626b;
+        --accent: #0d9488;
+        --on-accent: #ffffff;
+        color-scheme: light;
+      }
+    }
+
+    * { box-sizing: border-box; margin: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    img { max-width: 100%; height: auto; display: block; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+    nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 650; text-decoration: none; }
+    .brand svg { width: 24px; height: 24px; fill: var(--accent); }
+    .nav-links { display: flex; gap: 22px; font-size: 14px; }
+    .nav-links a { color: var(--muted); text-decoration: none; }
+    .nav-links a:hover { color: var(--text); }
+
+    .hero { display: grid; grid-template-columns: 1fr 344px; gap: 64px; align-items: center; padding: 56px 0 88px; }
+    h1 { font-size: clamp(34px, 5vw, 52px); line-height: 1.08; letter-spacing: -0.02em; font-weight: 700; text-wrap: balance; }
+    .lede { color: var(--muted); font-size: 18px; margin-top: 18px; max-width: 46ch; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .btn {
+      display: inline-flex; align-items: center; height: 44px; padding: 0 20px;
+      border-radius: 8px; border: 1px solid var(--line); background: var(--surface);
+      font-weight: 600; font-size: 15px; text-decoration: none;
+      transition: border-color .15s;
+    }
+    .btn:hover { border-color: var(--muted); }
+    .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+    .btn.primary:hover { border-color: var(--text); }
+    .note { color: var(--muted); font-size: 13px; margin-top: 14px; }
+
+    .shot { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #121316; }
+
+    section { padding: 72px 0; border-top: 1px solid var(--line); }
+    h2 { font-size: 26px; letter-spacing: -0.01em; font-weight: 650; }
+    .sub { color: var(--muted); margin-top: 8px; max-width: 60ch; }
+
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 32px; }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; }
+    .card h3 { font-size: 15px; font-weight: 600; }
+    .card p { color: var(--muted); font-size: 14px; margin-top: 6px; }
+
+    .shots { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 32px; max-width: 720px; }
+    figcaption { color: var(--muted); font-size: 13px; margin-top: 10px; }
+
+    ol.steps { list-style: none; padding: 0; margin-top: 28px; display: grid; gap: 10px; counter-reset: step; max-width: 680px; }
+    ol.steps li { counter-increment: step; display: grid; grid-template-columns: 30px 1fr; gap: 14px; align-items: start; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; font-size: 15px; }
+    ol.steps li::before { content: counter(step); width: 26px; height: 26px; border-radius: 50%; background: var(--surface-2); color: var(--accent); font-weight: 650; font-size: 13px; display: grid; place-items: center; font-variant-numeric: tabular-nums; }
+    code { font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--surface-2); padding: 2px 6px; border-radius: 4px; }
+
+    .privacy p { color: var(--muted); max-width: 64ch; margin-top: 12px; }
+
+    footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--muted); font-size: 13px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+    @media (max-width: 860px) {
+      .hero { grid-template-columns: 1fr; gap: 40px; padding: 32px 0 64px; }
+      .hero .shot { max-width: 344px; }
+      .grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px) {
+      .wrap { padding: 0 16px; }
+      .grid, .shots { grid-template-columns: 1fr; }
+      .nav-links a.hide-sm { display: none; }
+      section { padding: 56px 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="./">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="5" width="3.2" height="14" rx="1.6"/>
+          <rect x="8.4" y="9" width="3.2" height="10" rx="1.6"/>
+          <rect x="13.8" y="12" width="3.2" height="7" rx="1.6"/>
+          <rect x="19.2" y="14.5" width="1.8" height="4.5" rx=".9"/>
+        </svg>
+        Bassline
+      </a>
+      <div class="nav-links">
+        <a class="hide-sm" href="#features">Features</a>
+        <a class="hide-sm" href="#install">Install</a>
+        <a class="hide-sm" href="#privacy">Privacy</a>
+        <a href="https://github.com/imtaqin/bassline">GitHub</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div>
+        <h1>Clean bass and a real equalizer for any Chrome tab</h1>
+        <p class="lede">Bassline boosts the low end without the distortion, and adds a 10-band equalizer, reverb, echo, stereo width and a compressor. One click per tab.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://github.com/imtaqin/bassline/releases/latest/download/bassline.zip">Download ZIP</a>
+          <a class="btn" href="https://github.com/imtaqin/bassline">View source</a>
+        </div>
+        <p class="note">Chrome 116 or newer. Free, with the source on GitHub.</p>
+      </div>
+      <div class="shot">
+        <img src="assets/sound.png" width="344" height="574" alt="Bassline popup showing the spectrum meter, presets and the bass boost, treble, clarity and volume sliders">
+      </div>
+    </header>
+
+    <section id="features">
+      <h2>What it does</h2>
+      <p class="sub">Everything runs through one audio chain built so that boosting bass does not push the signal into clipping.</p>
+      <div class="grid">
+        <div class="card"><h3>Clean bass boost</h3><p>A low shelf plus a gentle peak, with a tunable frequency from 40 to 200 Hz and automatic headroom as you turn it up.</p></div>
+        <div class="card"><h3>10-band equalizer</h3><p>31 Hz to 16 kHz, 12 dB up or down per band. Double-click a band to reset it.</p></div>
+        <div class="card"><h3>Eight presets</h3><p>Flat, Clean, Deep, Punch, Vocal, Bright, Cinema and Night. Tweak any of them and keep your own.</p></div>
+        <div class="card"><h3>Effects</h3><p>Reverb, echo, stereo width from mono to 200 percent, and a compressor for evening out loud and quiet parts.</p></div>
+        <div class="card"><h3>Protection built in</h3><p>A subsonic filter removes rumble your speakers cannot play, and a peak limiter catches anything that would clip.</p></div>
+        <div class="card"><h3>Live spectrum</h3><p>A segmented meter with peak hold shows what the tab is playing after your settings are applied.</p></div>
+      </div>
+
+      <div class="shots">
+        <figure>
+          <div class="shot"><img src="assets/eq.png" width="344" height="480" loading="lazy" alt="Equalizer tab with ten vertical band sliders"></div>
+          <figcaption>Equalizer</figcaption>
+        </figure>
+        <figure>
+          <div class="shot"><img src="assets/effects.png" width="344" height="480" loading="lazy" alt="Effects tab with stereo width, reverb, echo and compressor sliders"></div>
+          <figcaption>Effects</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="install">
+      <h2>Install</h2>
+      <p class="sub">Until it is on the Chrome Web Store, load it manually. It takes about a minute.</p>
+      <ol class="steps">
+        <li><span>Download <a href="https://github.com/imtaqin/bassline/releases/latest/download/bassline.zip">bassline.zip</a> and unzip it.</span></li>
+        <li><span>Open <code>chrome://extensions</code> and turn on Developer mode.</span></li>
+        <li><span>Click Load unpacked and choose the unzipped folder.</span></li>
+        <li><span>Open a tab that is playing audio, click the Bassline icon and press the power button.</span></li>
+      </ol>
+    </section>
+
+    <section id="privacy" class="privacy">
+      <h2>Privacy</h2>
+      <p>Bassline does not collect, store or send any data. It has no analytics, no account and makes no network requests.</p>
+      <p>Audio from a tab is processed on your device only while you have switched Bassline on for that tab, and it is never recorded. Your slider settings are saved in Chrome's local extension storage on your computer.</p>
+      <p>Permissions used: tab capture and offscreen to process the audio, storage to remember your settings, and active tab to know which tab you switched it on for.</p>
+    </section>
+
+    <footer>
+      <span>Bassline Equalizer</span>
+      <a href="https://github.com/imtaqin/bassline">github.com/imtaqin/bassline</a>
+    </footer>
+  </div>
+</body>
+</html>
